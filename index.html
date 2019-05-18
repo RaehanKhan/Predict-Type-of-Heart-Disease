@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Heart Disease Pediction</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/noui/nouislider.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+<!--===============================================================================================-->
+	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
+    <script src="data.js"></script>
+    <script src="typesearch.js"></script>
+</head>
+<body>
+
+
+	<div class="container-contact100">
+		<div class="wrap-contact100">
+			<form class="contact100-form validate-form">
+				<span class="contact100-form-title">
+					Predicting Heart Disease and Classifying its Type
+				</span>
+
+				<div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate="Please Type Your Age">
+					<span class="label-input100">AGE *</span>
+					<input class="input100" type="text" name="age" id="age" placeholder="Enter Your Age">
+				</div>
+
+				<div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Enter Your Sex">
+					<span class="label-input100">Sex *</span><br>
+					<div>
+						<select class="js-select5" name="sex" id="sex">
+							<option value="1">Male(1)</option>
+							<option value="0">Female(0)</option>
+						</select>
+						<div class="dropDownSelect5"></div>
+					</div>
+				</div>
+
+				<div class="wrap-input100 input100-select bg1">
+					<span class="label-input100">Chest Pain Type *</span><br>
+					<div>
+						<select class="js-select2" name="cp" id="cp">
+							<option value="0">Typical Angina(0)</option>
+							<option value="1">Atypical Angina(1)</option>
+							<option value="2">Non-Anginal Pain(2)</option>
+							<option value="3">Asymptomatic(3)</option>
+						</select>
+						<div class="dropDownSelect2"></div>
+					</div>
+				</div>
+
+				<div class="wrap-contact100-form-range">
+					<span class="label-input100">resting blood pressure (in mm Hg on admission to the 
+						hospital) *
+					</span><br>
+
+					<div class="contact100-form-range-value">
+						<span id="value-lower">80</span><span id="value-upper"></span>
+						<input type="text" name="from-value" id="from-value">
+						<input type="text" name="to-value">
+					</div>
+
+					<div class="contact100-form-range-bar">
+						<div id="filter-bar"></div>
+					</div>
+				</div>
+
+				<div class="wrap-contact100-form-range">
+					<span class="label-input100">serum cholestoral in mg/dl) *
+					</span><br>
+
+					<div class="contact100-form-range-value">
+						<span id="value-lower1">150</span><span id="value-upper1"></span>
+						<input type="text" name="from-value1" id="from-value1">
+						<input type="text" name="to-value1">
+					</div>
+
+					<div class="contact100-form-range-bar">
+						<div id="filter-bar1"></div>
+					</div>
+				</div>
+
+				<div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Enter Your fbs">
+					<span class="label-input100">fasting blood sugar > 120 mg/dl *</span><br>
+					<div>
+						<select class="js-select6" name="fbs" id="fbs">
+							<option value="1">Yes(1)</option>
+							<option value="0">No(0)</option>
+						</select>
+						<div class="dropDownSelect6"></div>
+					</div>
+				</div>
+
+				<div class="wrap-input100 bg1 rs1-wrap-input100">
+					<span class="label-input100">resting electrocardiographic results *</span><br>
+					<div>
+						<select class="js-select" name="restecg" id="restecg">
+							<option value="0">Normal(0)</option>
+							<option value="1">Having ST-T Wave Abnormality(1)</option>
+							<option value="2">Showing Probable or Definite Left Ventricular Hypertrophy(2)</option>
+						</select>
+						<div class="dropDownSelect"></div>
+					</div>
+				</div>
+
+				<div class="wrap-contact100-form-range">
+					<span class="label-input100">maximum heart rate achieved *</span><br>
+
+					<div class="contact100-form-range-value">
+						<span id="value-lower3">80</span><span id="value-upper3"></span>
+						<input type="text" name="from-value3" id="from-value3">
+						<input type="text" name="to-value3">
+					</div>
+
+					<div class="contact100-form-range-bar">
+						<div id="filter-bar3"></div>
+					</div>
+				</div>
+
+				<div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Enter Your exang">
+					<span class="label-input100">exercise induced angina  *</span><br>
+					<div>
+						<select class="js-select7" name="exang" id="exang">
+							<option value="1">Yes(1)</option>
+							<option value="0">No(0)</option>
+						</select>
+						<div class="dropDownSelect7"></div>
+					</div>
+				</div>
+
+				<div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate="Please Type Your oldpeak">
+					<span class="label-input100">ST depression induced by exercise relative to rest *</span><br>
+					<input class="input100" type="text" name="oldpeak" id="oldpeak" placeholder="Enter Your oldpeak">
+				</div>
+
+				<div class="wrap-input100 bg1 rs1-wrap-input100">
+					<span class="label-input100">the slope of the peak exercise ST segment *</span><br>
+					<div>
+						<select class="js-select1" name="slope" id="slope">
+							<option value="1">Upsloping(1)</option>
+							<option value="2">Flat(2)</option>
+							<option value="3">Downsloping(3)</option>
+						</select>
+						<div class="dropDownSelect1"></div>
+					</div>
+				</div>
+
+				<div class="wrap-input100 bg1 rs1-wrap-input100">
+					<span class="label-input100">number of major vessels (0-4) colored by flourosopy *</span><br>
+					<div>
+						<select class="js-select3" name="ca" id="ca">
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+						</select>
+						<div class="dropDownSelect3"></div>
+					</div>
+				</div> 
+
+				<div class="wrap-input100 bg1">
+					<span class="label-input100">thalassemia *</span><br>
+					<div>
+						<select class="js-select4" name="thal" id="thal">
+							<option value="1">Normal(1)</option>
+							<option value="2">Fixed Defect(2)</option>
+							<option value="3">Reversable Defect(3)</option>
+						</select>
+						<div class="dropDownSelect4"></div>
+					</div>
+				</div>
+
+				<div class="wrap-input100 validate-input bg0">
+					<span class="label-input100">Output</span><br><br><br>
+					<div class="input100" name="message" id="disp">
+						<label id="res"></label><br>
+						<label id="load"></label><br><br><br>
+						<label id="res1"></label>
+					</div>
+				</div>
+
+				<div class="container-contact100-form-btn">
+					<button class="contact100-form-btn" onclick="doHeart()">
+						<span>
+							Submit
+							<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+						</span>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script>
+        async function trainModelDisease(xTrain, yTrain, xTest, yTest){
+            const model = tf.sequential();
+            const learningRate = .01;
+            const numberOfEpochs = 50;
+            const optimizer = tf.train.adam(learningRate);
+
+            model.add(tf.layers.dense(
+                { units: 26, activation: 'sigmoid', inputShape: [xTrain.shape[1]]}
+            ));
+            
+
+            model.add(tf.layers.dense(
+                { units: 2, activation: 'softmax'}
+            ));
+
+            model.compile({
+                optimizer: optimizer,
+                loss: 'categoricalCrossentropy',
+                metrics: ['accuracy']
+            });
+
+            const history = await model.fit(xTrain, yTrain,
+            { epochs: numberOfEpochs, validationData: [xTest, yTest], 
+                callbacks: {
+                    onEpochEnd: async (epoch, logs)=> {
+                        console.log("Epoch: "+ epoch + " Logs: "+ logs.loss);
+                        await tf.nextFrame();
+                        console.log('Accuracy', (logs.acc));
+                    },
+                }
+            });
+            return model;
+        }
+        async function doHeart(){
+			var age = document.getElementById("age").value;
+			var sex = document.getElementById("sex").value;
+			var cp = document.getElementById("cp").value; 
+			var trestbps = document.getElementById("from-value").value;
+			var chol = document.getElementById("from-value1").value; 
+			var fbs = document.getElementById("fbs").value;
+			var restecg = document.getElementById("restecg").value; 
+			var thalach = document.getElementById("from-value3").value;
+			var exang = document.getElementById("exang").value;
+			var oldpeak = document.getElementById("oldpeak").value;
+			var slope = document.getElementById("slope").value; 
+			var ca = document.getElementById("ca").value; 
+			var thal = document.getElementById("thal").value;
+	
+			//alert(age+"<br>"+sex+"<br>"+cp+"<br>"+trestbps+"<br>"+chol+"<br>"+fbs+"<br>"+restecg+"<br>"+thalach+"<br>"+exang+"<br>"+oldpeak+"<br>"+slope+"<br>"+ca+"<br>"+thal);
+
+            const [xTrain, yTrain, xTest, yTest] = getHeart(.2);
+
+            model = await trainModelDisease(xTrain, yTrain, xTest, yTest);
+
+            const input = tf.tensor2d([parseInt(age),parseInt(sex),parseInt(cp),parseInt(trestbps),parseInt(chol),parseInt(fbs),parseInt(restecg),parseInt(thalach),parseInt(exang),parseInt(oldpeak),parseInt(slope),parseInt(ca),parseInt(thal)], [1,13]);
+            const prediction = model.predict(input);
+            //alert(prediction);
+            
+
+            const predictionWithArgMax = model.predict(input).argMax(-1).dataSync();
+            //alert(predictionWithArgMax);
+
+            //alert(HEART_CLASSES[predictionWithArgMax]);
+
+            if(HEART_CLASSES[predictionWithArgMax] == "Disease is present") {
+                doHeartType();
+                var load = document.getElementById("load");
+                load.innerHTML = "<p>Loading the type...</p>";
+            }
+            var res = document.getElementById("res");
+
+            res.innerHTML = "<h1><big>"+HEART_CLASSES[predictionWithArgMax]+"</big></h1>";
+
+            const xData = xTest.dataSync();
+            const yTrue = yTest.argMax(-1).dataSync();
+
+            const predictions = await model.predict(xTest);
+            const yPred = prediction.argMax(-1).dataSync();
+
+            var correct = 0;
+            var wrong = 0;
+
+            for(var i=0; i<yTrue.length; i++){
+                if(yTrain[i] == yPred[i]){
+                    correct++;
+                } else {
+                    wrong++;
+                }
+            }
+            //alert("Prediction error rate: "+(wrong/yTrue.length));
+        }
+        async function trainModel(xTrain, yTrain, xTest, yTest){
+            const model = tf.sequential();
+            const learningRate = .01;
+            const numberOfEpochs = 50;
+            const optimizer = tf.train.adam(learningRate);
+
+            model.add(tf.layers.dense(
+                { units: 13, activation: 'sigmoid', inputShape: [xTrain.shape[1]]}
+            ));
+            
+            model.add(tf.layers.dense(
+                { units: 5, activation: 'softmax'}
+            ));
+
+            model.compile({
+                optimizer: optimizer,
+                loss: 'categoricalCrossentropy',
+                metrics: ['accuracy']
+            });
+
+            const history = await model.fit(xTrain, yTrain,
+            { epochs: numberOfEpochs, validationData: [xTest, yTest], 
+                callbacks: {
+                    onEpochEnd: async (epoch, logs)=> {
+                        console.log("Epoch: "+ epoch + " Logs: "+ logs.loss);
+                        await tf.nextFrame();
+                        console.log('Accuracy', (logs.acc));
+                    },
+                }
+            });
+            return model;
+        }
+        async function doHeartType(){
+			var age = document.getElementById("age").value;
+			var sex = document.getElementById("sex").value;
+			var cp = document.getElementById("cp").value; 
+			var trestbps = document.getElementById("from-value").value;
+			var chol = document.getElementById("from-value1").value; 
+			var fbs = document.getElementById("fbs").value;
+			var restecg = document.getElementById("restecg").value; 
+			var thalach = document.getElementById("from-value3").value;
+			var exang = document.getElementById("exang").value;
+			var oldpeak = document.getElementById("oldpeak").value;
+			var slope = document.getElementById("slope").value; 
+			var ca = document.getElementById("ca").value; 
+			var thal = document.getElementById("thal").value;
+
+            const [xTrain, yTrain, xTest, yTest] = getHeartData(.2);
+
+            model = await trainModel(xTrain, yTrain, xTest, yTest);
+
+            const input = tf.tensor2d([parseInt(age),parseInt(sex),parseInt(cp),parseInt(trestbps),parseInt(chol),parseInt(fbs),parseInt(restecg),parseInt(thalach),parseInt(exang),parseInt(oldpeak),parseInt(slope),parseInt(ca),parseInt(thal)], [1,13]);
+            const prediction = model.predict(input);
+            //alert(prediction);
+            
+
+            const predictionWithArgMax = model.predict(input).argMax(-1).dataSync();
+            //alert(predictionWithArgMax);
+
+            //alert(HEART_CLASSES_TYPE[predictionWithArgMax]);
+
+            var res1 = document.getElementById("res1");
+            res1.innerHTML = "<h1><big>"+HEART_CLASSES_TYPE[predictionWithArgMax]+"</big></h1>";
+
+            const xData = xTest.dataSync();
+            const yTrue = yTest.argMax(-1).dataSync();
+
+            const predictions = await model.predict(xTest);
+            const yPred = prediction.argMax(-1).dataSync();
+
+            var correct = 0;
+            var wrong = 0;
+
+            for(var i=0; i<yTrue.length; i++){
+                if(yTrain[i] == yPred[i]){
+                    correct++;
+                } else {
+                    wrong++;
+                }
+            }
+            //alert("Prediction error rate: "+(wrong/yTrue.length));
+        } 
+    </script>
+
+
+<!--===============================================================================================-->
+	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/bootstrap/js/popper.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/select2/select2.min.js"></script>
+	<script>
+		$(".js-select7").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect7')
+			});
+
+
+			$(".js-select7").each(function(){
+				$(this).on('select2:close', function (e){
+					if($(this).val() == "Please chooses") {
+						$('.js-show-service').slideUp();
+					}
+					else {
+						$('.js-show-service').slideUp();
+						$('.js-show-service').slideDown();
+					}
+				});
+			});
+		})
+	</script>
+	<script>
+		$(".js-select6").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect6')
+			});
+
+
+			$(".js-select6").each(function(){
+				$(this).on('select2:close', function (e){
+					if($(this).val() == "Please chooses") {
+						$('.js-show-service').slideUp();
+					}
+					else {
+						$('.js-show-service').slideUp();
+						$('.js-show-service').slideDown();
+					}
+				});
+			});
+		})
+	</script>
+	<script>
+		$(".js-select5").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect5')
+			});
+
+
+			$(".js-select5").each(function(){
+				$(this).on('select2:close', function (e){
+					if($(this).val() == "Please chooses") {
+						$('.js-show-service').slideUp();
+					}
+					else {
+						$('.js-show-service').slideUp();
+						$('.js-show-service').slideDown();
+					}
+				});
+			});
+		})
+	</script>
+	<script>
+		$(".js-select4").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect4')
+			});
+
+
+			$(".js-select4").each(function(){
+				$(this).on('select2:close', function (e){
+					if($(this).val() == "Please chooses") {
+						$('.js-show-service').slideUp();
+					}
+					else {
+						$('.js-show-service').slideUp();
+						$('.js-show-service').slideDown();
+					}
+				});
+			});
+		})
+	</script>
+	<script>
+		$(".js-select3").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect3')
+			});
+
+
+			$(".js-select3").each(function(){
+				$(this).on('select2:close', function (e){
+					if($(this).val() == "Please chooses") {
+						$('.js-show-service').slideUp();
+					}
+					else {
+						$('.js-show-service').slideUp();
+						$('.js-show-service').slideDown();
+					}
+				});
+			});
+		})
+	</script>
+	<script>
+		$(".js-select2").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect2')
+			});
+
+
+			$(".js-select2").each(function(){
+				$(this).on('select2:close', function (e){
+					if($(this).val() == "Please chooses") {
+						$('.js-show-service').slideUp();
+					}
+					else {
+						$('.js-show-service').slideUp();
+						$('.js-show-service').slideDown();
+					}
+				});
+			});
+		})
+	</script>
+	<script>
+		$(".js-select1").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect1')
+			});
+
+
+			$(".js-select1").each(function(){
+				$(this).on('select2:close', function (e){
+					if($(this).val() == "Please chooses") {
+						$('.js-show-service').slideUp();
+					}
+					else {
+						$('.js-show-service').slideUp();
+						$('.js-show-service').slideDown();
+					}
+				});
+			});
+		})
+	</script>
+	<script>
+		$(".js-select").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect')
+			});
+
+
+			$(".js-select").each(function(){
+				$(this).on('select2:close', function (e){
+					if($(this).val() == "Please chooses") {
+						$('.js-show-service').slideUp();
+					}
+					else {
+						$('.js-show-service').slideUp();
+						$('.js-show-service').slideDown();
+					}
+				});
+			});
+		})
+	</script>
+<!--===============================================================================================-->
+	<script src="vendor/daterangepicker/moment.min.js"></script>
+	<script src="vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/noui/nouislider.min.js"></script>
+	<script>
+	    var filterBar = document.getElementById('filter-bar');
+
+	    noUiSlider.create(filterBar, {
+	        start: [ 80],
+	        connect: true,
+	        range: {
+	            'min': 80,
+	            'max': 180
+	        }
+	    });
+
+	    var skipValues = [
+	    document.getElementById('value-lower'),
+	    document.getElementById('value-upper')
+	    ];
+
+	    filterBar.noUiSlider.on('update', function( values, handle ) {
+	        skipValues[handle].innerHTML = Math.round(values[handle]);
+	        $('.contact100-form-range-value input[name="from-value"]').val($('#value-lower').html());
+	    });
+	</script>
+	<script>
+	    var filterBar = document.getElementById('filter-bar1');
+
+	    noUiSlider.create(filterBar, {
+	        start: [ 150],
+	        connect: true,
+	        range: {
+	            'min': 150,
+	            'max': 400
+	        }
+	    });
+
+	    var skipValues1 = [
+	    document.getElementById('value-lower1'),
+	    document.getElementById('value-upper1')
+	    ];
+
+	    filterBar.noUiSlider.on('update', function( values, handle ) {
+	        skipValues1[handle].innerHTML = Math.round(values[handle]);
+	        $('.contact100-form-range-value input[name="from-value1"]').val($('#value-lower1').html());
+	    });
+	</script>
+	<script>
+	    var filterBar = document.getElementById('filter-bar3');
+
+	    noUiSlider.create(filterBar, {
+	        start: [ 80],
+	        connect: true,
+	        range: {
+	            'min': 80,
+	            'max': 200
+	        }
+	    });
+
+	    var skipValues2 = [
+	    document.getElementById('value-lower3'),
+	    document.getElementById('value-upper3')
+	    ];
+
+	    filterBar.noUiSlider.on('update', function( values, handle ) {
+	        skipValues2[handle].innerHTML = Math.round(values[handle]);
+	        $('.contact100-form-range-value input[name="from-value3"]').val($('#value-lower3').html());
+	    });
+	</script>
+<!--===============================================================================================-->
+	<script src="js/main.js"></script>
+	<script src="ss.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-23581568-13');
+</script>
+
+</body>
+</html>

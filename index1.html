@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>tf.js</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
+    <script src="data.js"></script>
+    <script src="typesearch.js"></script>
+</head>
+<body>
+    <a href="HeartDiseasePrediction.html">Check Out Model</a>
+    <label id="res"></label><br>
+    <label id="load"></label><br><br><br>
+    <label id="res1"></label>
+    <script>
+        var result="";
+        async function trainModelDisease(xTrain, yTrain, xTest, yTest){
+            const model = tf.sequential();
+            const learningRate = .01;
+            const numberOfEpochs = 50;
+            const optimizer = tf.train.adam(learningRate);
+
+            model.add(tf.layers.dense(
+                { units: 26, activation: 'sigmoid', inputShape: [xTrain.shape[1]]}
+            ));
+            
+
+            model.add(tf.layers.dense(
+                { units: 2, activation: 'softmax'}
+            ));
+
+            model.compile({
+                optimizer: optimizer,
+                loss: 'categoricalCrossentropy',
+                metrics: ['accuracy']
+            });
+
+            const history = await model.fit(xTrain, yTrain,
+            { epochs: numberOfEpochs, validationData: [xTest, yTest], 
+                callbacks: {
+                    onEpochEnd: async (epoch, logs)=> {
+                        console.log("Epoch: "+ epoch + " Logs: "+ logs.loss);
+                        await tf.nextFrame();
+                        console.log('Accuracy', (logs.acc));
+                    },
+                }
+            });
+            return model;
+        }
+        async function doHeart(){
+            const [xTrain, yTrain, xTest, yTest] = getHeart(.2);
+
+            model = await trainModelDisease(xTrain, yTrain, xTest, yTest);
+
+            const input = tf.tensor2d([54,0,2,160,201,0,1,163,0,0,2,1,2], [1,13]);
+            const prediction = model.predict(input);
+            //alert(prediction);
+            
+
+            const predictionWithArgMax = model.predict(input).argMax(-1).dataSync();
+            //alert(predictionWithArgMax);
+
+            //alert(HEART_CLASSES[predictionWithArgMax]);
+
+            if(HEART_CLASSES[predictionWithArgMax] == "Disease is present") {
+                doHeartType();
+                var load = document.getElementById("load");
+                load.innerHTML = "<p>Loading the type...</p>";
+            }
+            var res = document.getElementById("res");
+
+            res.innerHTML = "<h1><big>"+HEART_CLASSES[predictionWithArgMax]+"</big></h1>";
+
+            const xData = xTest.dataSync();
+            const yTrue = yTest.argMax(-1).dataSync();
+
+            const predictions = await model.predict(xTest);
+            const yPred = prediction.argMax(-1).dataSync();
+
+            var correct = 0;
+            var wrong = 0;
+
+            for(var i=0; i<yTrue.length; i++){
+                if(yTrain[i] == yPred[i]){
+                    correct++;
+                } else {
+                    wrong++;
+                }
+            }
+            //alert("Prediction error rate: "+(wrong/yTrue.length));
+        }
+        async function trainModel(xTrain, yTrain, xTest, yTest){
+            const model = tf.sequential();
+            const learningRate = .01;
+            const numberOfEpochs = 50;
+            const optimizer = tf.train.adam(learningRate);
+
+            model.add(tf.layers.dense(
+                { units: 13, activation: 'sigmoid', inputShape: [xTrain.shape[1]]}
+            ));
+            
+            model.add(tf.layers.dense(
+                { units: 5, activation: 'softmax'}
+            ));
+
+            model.compile({
+                optimizer: optimizer,
+                loss: 'categoricalCrossentropy',
+                metrics: ['accuracy']
+            });
+
+            const history = await model.fit(xTrain, yTrain,
+            { epochs: numberOfEpochs, validationData: [xTest, yTest], 
+                callbacks: {
+                    onEpochEnd: async (epoch, logs)=> {
+                        console.log("Epoch: "+ epoch + " Logs: "+ logs.loss);
+                        await tf.nextFrame();
+                        console.log('Accuracy', (logs.acc));
+                    },
+                }
+            });
+            return model;
+        }
+        async function doHeartType(){
+            const [xTrain, yTrain, xTest, yTest] = getHeartData(.2);
+
+            model = await trainModel(xTrain, yTrain, xTest, yTest);
+
+            const input = tf.tensor2d([54,0,2,160,201,0,1,163,0,0,2,1,2], [1,13]);
+            const prediction = model.predict(input);
+            //alert(prediction);
+            
+
+            const predictionWithArgMax = model.predict(input).argMax(-1).dataSync();
+            //alert(predictionWithArgMax);
+
+            //alert(HEART_CLASSES_TYPE[predictionWithArgMax]);
+
+            var res1 = document.getElementById("res1");
+            res1.innerHTML = "<h1><big>"+HEART_CLASSES_TYPE[predictionWithArgMax]+"</big></h1>";
+
+            const xData = xTest.dataSync();
+            const yTrue = yTest.argMax(-1).dataSync();
+
+            const predictions = await model.predict(xTest);
+            const yPred = prediction.argMax(-1).dataSync();
+
+            var correct = 0;
+            var wrong = 0;
+
+            for(var i=0; i<yTrue.length; i++){
+                if(yTrain[i] == yPred[i]){
+                    correct++;
+                } else {
+                    wrong++;
+                }
+            }
+            //alert("Prediction error rate: "+(wrong/yTrue.length));
+        }
+        doHeart(); 
+    </script>
+</body>
+</html>
