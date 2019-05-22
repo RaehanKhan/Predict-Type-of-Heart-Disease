@@ -193,7 +193,7 @@
 					</div>
 				</div>
 
-				<div class="wrap-input100 validate-input bg0">
+				<div class="wrap-input100 validate-input bg0" data-validate="Fetching The Disease Status...">
 					<span class="label-input100">Output</span><br><br><br>
 					<div class="input100" name="message" id="disp">
 						<label id="res"></label><br>
@@ -262,6 +262,10 @@
 			var slope = document.getElementById("slope").value; 
 			var ca = document.getElementById("ca").value; 
 			var thal = document.getElementById("thal").value;
+			var load = document.getElementById("load");
+			load.innerHTML = " ";
+			var res = document.getElementById("res");
+			res.innerHTML = " ";
 	
 			//alert(age+"<br>"+sex+"<br>"+cp+"<br>"+trestbps+"<br>"+chol+"<br>"+fbs+"<br>"+restecg+"<br>"+thalach+"<br>"+exang+"<br>"+oldpeak+"<br>"+slope+"<br>"+ca+"<br>"+thal);
 
@@ -281,10 +285,10 @@
 
             if(HEART_CLASSES[predictionWithArgMax] == "Disease is present") {
                 doHeartType();
-                var load = document.getElementById("load");
+                
                 load.innerHTML = "<p>Loading the type...</p>";
             }
-            var res = document.getElementById("res");
+            
 
             res.innerHTML = "<h1><big>"+HEART_CLASSES[predictionWithArgMax]+"</big></h1>";
 
@@ -352,6 +356,8 @@
 			var slope = document.getElementById("slope").value; 
 			var ca = document.getElementById("ca").value; 
 			var thal = document.getElementById("thal").value;
+			var res1 = document.getElementById("res1");
+            res1.innerHTML = " ";
 
             const [xTrain, yTrain, xTest, yTest] = getHeartData(.2);
 
@@ -367,7 +373,6 @@
 
             //alert(HEART_CLASSES_TYPE[predictionWithArgMax]);
 
-            var res1 = document.getElementById("res1");
             res1.innerHTML = "<h1><big>"+HEART_CLASSES_TYPE[predictionWithArgMax]+"</big></h1>";
 
             const xData = xTest.dataSync();
