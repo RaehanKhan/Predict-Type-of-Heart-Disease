@@ -28,19 +28,45 @@
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 <!--===============================================================================================-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
     <script src="data.js"></script>
-    <script src="typesearch.js"></script>
+	<script src="typesearch.js"></script>
+	<script>
+		function code() {
+			window.location.href = "https://github.com/RaehanKhan/Predict-Type-of-Heart-Disease";
+		}
+		function model() {
+			window.location.href = "https://colab.research.google.com/drive/13EThgYKSRwGBJJn_8iAvg-QWUWjCufB1";
+		}
+		function gstart() {
+			window.location.href = "#start";
+		}
+	</script>
 </head>
 <body>
-
-
 	<div class="container-contact100">
+	<div class="wrap-contact100">
+			<form class="contact100-form validate-form">
+			<span class="contact100-form-title">
+					Predicting Heart Disease and Classifying its Type
+			</span>
+			<span class="contact100-form-title">
+					<i class="fas fa-code" onclick="code()" title="Code"></i>
+					<i class="fas fa-grip-lines-vertical" style="color:gray"></i>
+					<i class="fas fa-cog" onclick="model()" title="Model"></i>
+					<i class="fas fa-grip-lines-vertical" style="color:gray"></i>
+					<i class="fas fa-arrow-circle-right" onclick="gstart()" title="Get Started"></i>
+			</span>
+			</form>
+	</div>
+	</div>
+
+
+	<div class="container-contact100" id="start">
 		<div class="wrap-contact100">
 			<form class="contact100-form validate-form">
-				<span class="contact100-form-title">
-					Predicting Heart Disease and Classifying its Type
-				</span>
+				
 
 				<div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate="Please Type Your Age">
 					<span class="label-input100">AGE *</span>
