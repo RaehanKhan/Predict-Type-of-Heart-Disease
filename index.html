@@ -312,11 +312,11 @@
             if(HEART_CLASSES[predictionWithArgMax] == "Disease is present") {
                 doHeartType();
                 
-                load.innerHTML = "<p>Loading the type...</p>";
+                load.innerHTML = "<br><p>Loading the type...</p>";
             }
             
 
-            res.innerHTML = "<h1><big>"+HEART_CLASSES[predictionWithArgMax]+"</big></h1>";
+            res.innerHTML = "<h5><big>"+HEART_CLASSES[predictionWithArgMax]+"</big></h5>";
 
             const xData = xTest.dataSync();
             const yTrue = yTest.argMax(-1).dataSync();
@@ -399,7 +399,7 @@
 
             //alert(HEART_CLASSES_TYPE[predictionWithArgMax]);
 
-            res1.innerHTML = "<h1><big>"+HEART_CLASSES_TYPE[predictionWithArgMax]+"</big></h1>";
+            res1.innerHTML = "<h5><big>"+HEART_CLASSES_TYPE[predictionWithArgMax]+"</big></h5>";
 
             const xData = xTest.dataSync();
             const yTrue = yTest.argMax(-1).dataSync();
